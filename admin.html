@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบแอดมิน - SleepyCat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background: #f4f6f8; margin: 0; padding: 20px; color: #333; }
+        .admin-container { max-width: 1000px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
+        .admin-header h2 { margin: 0; color: #8b5a2b; }
+        .back-btn { background: #8b5a2b; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; font-size: 13px; }
+        th { background: #f8f9fa; }
+        select { padding: 6px; border-radius: 6px; font-family: 'Kanit'; cursor: pointer; }
+        .btn-delete { background: #ff4d4f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h2><i class="fas fa-user-shield"></i> ระบบจัดการคำสั่งซื้อ (Admin Dashboard)</h2>
+            <a href="home.html" class="back-btn"><i class="fas fa-home"></i> กลับหน้าหลัก</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>รหัส / เลขพัสดุ</th>
+                    <th>ลูกค้า</th>
+                    <th>ที่อยู่จัดส่ง</th>
+                    <th>ยอดรวม</th>
+                    <th>การชำระเงิน</th>
+                    <th>อัปเดตสถานะขนส่ง</th>
+                    <th>จัดการ</th>
+                </tr>
+            </thead>
+            <tbody id="adminOrderTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        function loadAdminOrders() {
+            const tableBody = document.getElementById('adminOrderTable');
+            tableBody.innerHTML = '';
+            let orders = JSON.parse(localStorage.getItem('sleepycat_orders')) || [];
+
+            if (orders.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">ไม่มีคำสั่งซื้อในระบบ</td></tr>';
+                return;
+            }
+
+            orders.forEach((order, index) => {
+                const tr = document.createElement('tr');
+
+                tr.innerHTML = `
+                    <td>
+                        <b>#${order.orderId}</b><br>
+                        <small style="color:#666;">${order.trackingNo}</small>
+                    </td>
+                    <td>${order.name}<br><small>${order.phone}</small></td>
+                    <td>${order.address}</td>
+                    <td><b>฿${order.totalAmount.toLocaleString()}</b></td>
+                    <td>${order.paymentMethod}</td>
+                    <td>
+                        <select onchange="updateOrderStatus(${index}, this.value)">
+                            <option value="1" ${order.step == 1 ? 'selected' : ''}>1. รับออเดอร์แล้ว</option>
+                            <option value="2" ${order.step == 2 ? 'selected' : ''}>2. กำลังแพ็คสินค้า</option>
+                            <option value="3" ${order.step == 3 ? 'selected' : ''}>3. บริษัทขนส่งรับพัสดุแล้ว</option>
+                            <option value="4" ${order.step == 4 ? 'selected' : ''}>4. จัดส่งสำเร็จเรียบร้อย</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn-delete" onclick="deleteOrder(${index})"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function updateOrderStatus(index, stepValue) {
+            let orders = JSON.parse(localStorage.getItem('sleepycat_orders')) || [];
+            orders[index].step = parseInt(stepValue);
+            localStorage.setItem('sleepycat_orders', JSON.stringify(orders));
+            alert("อัปเดตสถานะสำเร็จ! หน้าของลูกค้าจะเปลี่ยนเป็นสถานะนี้ทันที");
+        }
+
+        function deleteOrder(index) {
+            if (confirm("คุณต้องการลบคำสั่งซื้อนี้ใช่หรือไม่?")) {
+                let orders = JSON.parse(localStorage.getItem('sleepycat_orders')) || [];
+                orders.splice(index, 1);
+                localStorage.setItem('sleepycat_orders', JSON.stringify(orders));
+                loadAdminOrders();
+            }
+        }
+
+        window.onload = loadAdminOrders;
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - SleepyCat</title>
+    <style>
+        body { font-family: 'Sarabun', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #fdf5e6; margin: 0; }
+        .login-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; width: 300px; border: 2px solid #e8d5c4; }
+        h2 { color: #8b5a2b; margin-bottom: 20px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; margin: 5px 0; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        #loginBtn { background-color: #8b5a2b; color: white; }
+        #loginBtn:hover { background-color: #6e4722; }
+        #registerBtn { background-color: #e8d5c4; color: #5a3d22; }
+        #registerBtn:hover { background-color: #d6c0ac; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>SleepyCat 🌙<br><span style="font-size: 14px; color: #666;">ร้านชุดนอนสุดน่ารัก</span></h2>
+        <input type="email" id="email" placeholder="อีเมลของคุณ" required>
+        <input type="password" id="password" placeholder="รหัสผ่าน" required>
+        <button id="loginBtn">เข้าสู่ระบบ</button>
+        <button id="registerBtn">สมัครสมาชิก</button>
+    </div>
+
+    <!-- เรียกใช้สคริปต์ Firebase -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>

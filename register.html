@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก - SleepyCat</title>
+    <style>
+        body { font-family: 'Sarabun', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #fdf5e6; margin: 0; }
+        .register-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; width: 320px; border: 2px solid #e8d5c4; }
+        h2 { color: #8b5a2b; margin-bottom: 5px; }
+        p { color: #666; font-size: 14px; margin-bottom: 20px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; margin: 15px 0 5px 0; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background-color: #8b5a2b; color: white; }
+        button:hover { background-color: #6e4722; }
+        .login-link { font-size: 14px; color: #8b5a2b; text-decoration: none; display: block; margin-top: 10px; }
+        .login-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="register-box">
+        <h2>สมัครสมาชิก 🌙</h2>
+        <p>มาร่วมเป็นครอบครัว SleepyCat กันเถอะ</p>
+        <input type="text" id="username" placeholder="ชื่อของคุณ" required>
+        <input type="email" id="email" placeholder="อีเมล" required>
+        <input type="password" id="password" placeholder="รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)" required>
+        <button id="registerBtn">ยืนยันการสมัคร</button>
+        <a href="index.html" class="login-link">มีบัญชีอยู่แล้ว? เข้าสู่ระบบที่นี่</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Firebase Config โปรเจกต์ใหม่ (sleep-f77fe)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCLZkKQOiQ22ZoyDKrBoyNacNGus99F4RY",
+            authDomain: "sleep-f77fe.firebaseapp.com",
+            projectId: "sleep-f77fe",
+            storageBucket: "sleep-f77fe.firebasestorage.app",
+            messagingSenderId: "403242518970",
+            appId: "1:403242518970:web:ae86bba2f17fcdfac23583",
+            measurementId: "G-NLSD8PWPGF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('registerBtn').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if(!email || !password) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+            if(password.length < 6) return alert("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    alert("🎉 สมัครสมาชิกสำเร็จ! ระบบกำลังพาท่านไปหน้าโฮมเพจ");
+                    window.location.href = "home.html";
+                })
+                .catch(error => {
+                    if (error.code === 'auth/email-already-in-use') alert("อีเมลนี้ถูกใช้งานไปแล้ว");
+                    else alert("❌ สมัครไม่สำเร็จ: " + error.message);
+                });
+        });
+    </script>
+</body>
+</html>
