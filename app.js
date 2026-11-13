@@ -57,8 +57,8 @@ function generatePromptPayPayload(phoneNumber, amount) {
 
 const path = window.location.pathname;
 
-// --- หน้า index.html ---
-if (path.includes("index.html") || path.endsWith("/") || path === "") {
+// --- หน้า index (รองรับทั้ง index.html และ /index บน Vercel) ---
+if (path.includes("index") || path.endsWith("/") || path === "") {
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const loginBtn = document.getElementById('loginBtn');
@@ -88,8 +88,8 @@ if (path.includes("index.html") || path.endsWith("/") || path === "") {
     });
 }
 
-// --- หน้า home.html ---
-if (path.includes("home.html")) {
+// --- หน้า home (รองรับทั้ง home.html และ /home บน Vercel) ---
+if (path.includes("home")) {
     const userEmailSpan = document.getElementById('userEmail');
     const logoutBtn = document.getElementById('logoutBtn');
     let currentUser = null;
@@ -158,7 +158,7 @@ if (path.includes("home.html")) {
             const matchCat = (category === 'all' || cardCat === category);
             const matchSearch = (!keyword || cardName.includes(keyword));
 
-            card.style.display = (matchCat && matchSearch) ? 'block' : 'none';
+            card.style.display = (matchCat && matchSearch) ? 'flex' : 'none';
         });
 
         // อัปเดตหัวข้อและปุ่มรีเซ็ต
